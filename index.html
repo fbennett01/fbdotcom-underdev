@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finn Bennett | Updating</title>
+    <style>
+        :root {
+            --bg-tint: rgba(224, 242, 254, 0.4);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent: #0ea5e9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #e0f2fe;
+            font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #viewport-container {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            z-index: 1;
+            transition: transform 0.15s ease-out;
+            will-change: transform;
+        }
+
+        #bg-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(0.9) brightness(1.05);
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(224, 242, 254, 0.2), rgba(224, 242, 254, 0.5));
+            backdrop-filter: contrast(1.05) saturate(1.1);
+            -webkit-backdrop-filter: contrast(1.05) saturate(1.1);
+            z-index: 2;
+        }
+
+        .ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 4rem;
+            pointer-events: none;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        h1 {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--text-main);
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 8px 18px;
+            border-radius: 100px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .main-message {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        #cycling-text {
+            font-size: clamp(1.8rem, 5vw, 3.2rem);
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            color: var(--text-main);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.4);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ui-layer {
+                padding: 2rem;
+            }
+            header {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            #cycling-text {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="viewport-container">
+        <video id="bg-video" autoplay muted loop playsinline></video>
+    </div>
+
+    <div class="overlay"></div>
+
+    <div class="ui-layer">
+        <header>
+            <h1>Finn Bennett</h1>
+            <div class="status-pill">
+                <div class="dot"></div>
+                Updating
+            </div>
+        </header>
+
+        <div class="main-message">
+            <div id="cycling-text">Warming up the single-engine...</div>
+        </div>
+
+        <footer>
+            <span>© 2026</span>
+            <span>Ventura, California</span>
+        </footer>
+    </div>
+
+    <script>
+        const phrases = [
+            "Warming up the single-engine...",
+            "Recalibrating the altimeter...",
+            "Untangling audio cables...",
+            "Rerouting over Ventura...",
+            "Brewing cockpit coffee...",
+            "Checking the headwinds...",
+            "Dodging seagulls...",
+            "Filing the flight plan...",
+            "Adjusting cabin pressure...",
+            "Convincing the server to fly...",
+            "Doing wing yoga...",
+            "Looking for a place to land..."
+        ];
+
+        const textEl = document.getElementById('cycling-text');
+        let index = 0;
+
+        function updateText() {
+            textEl.style.opacity = '0';
+            textEl.style.transform = 'translateY(15px) scale(0.98)';
+            setTimeout(() => {
+                index = (index + 1) % phrases.length;
+                textEl.innerText = phrases[index];
+                textEl.style.opacity = '1';
+                textEl.style.transform = 'translateY(0) scale(1)';
+            }, 800);
+        }
+
+        setInterval(updateText, 4000);
+
+        const viewport = document.getElementById('viewport-container');
+        let targetX = 0, targetY = 0;
+        let currentX = 0, currentY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+            targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+        });
+
+        window.addEventListener('deviceorientation', (e) => {
+            if (e.gamma) {
+                targetX = (e.gamma / 45);
+                targetY = (e.beta / 45);
+            }
+        });
+
+        function animate() {
+            currentX += (targetX - currentX) * 0.05;
+            currentY += (targetY - currentY) * 0.05;
+
+            const rotationZ = currentX * 4;
+            const rotationX = currentY * -2;
+            const translateX = currentX * -30;
+            const translateY = currentY * -30;
+
+            viewport.style.transform = `
+                rotateZ(${rotationZ}deg)
+                rotateX(${rotationX}deg)
+                translateX(${translateX}px)
+                translateY(${translateY}px)
+                scale(1.05)
+            `;
+            requestAnimationFrame(animate);
+        }
+
+        document.body.addEventListener('touchstart', () => {
+            const video = document.getElementById('bg-video');
+            if (video.paused) video.play();
+        }, { once: true });
+
+        animate();
+    </script>
+</body>
+</html>
