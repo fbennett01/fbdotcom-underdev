@@ -120,13 +120,22 @@
             margin-top: clamp(2rem, 8vh, 6rem);
         }
 
+        #cycling-text {
+            font-size: clamp(1.4rem, 3.8vw, 2.6rem);
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            color: var(--text-main);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+        }
+
         #status-message {
-            font-size: clamp(1.2rem, 2.8vw, 2rem);
+            margin-top: 1.2rem;
+            font-size: clamp(0.85rem, 1.6vw, 1.1rem);
             font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
             font-weight: 500;
             letter-spacing: 0.01em;
-            color: var(--text-main);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-muted);
             opacity: 1;
         }
 
@@ -159,8 +168,11 @@
                 flex-direction: column;
                 gap: 1.5rem;
             }
+            #cycling-text {
+                font-size: 1.8rem;
+            }
             #status-message {
-                font-size: 1.2rem;
+                font-size: 0.85rem;
             }
         }
     </style>
@@ -182,6 +194,7 @@
         </header>
 
         <div class="main-message">
+            <div id="cycling-text">Warming up the single-engine...</div>
             <div id="status-message">under development...be back soon!</div>
         </div>
 
@@ -192,6 +205,37 @@
     </div>
 
     <script>
+        const phrases = [
+            "Warming up the single-engine...",
+            "Recalibrating the altimeter...",
+            "Untangling audio cables...",
+            "Rerouting over Ventura...",
+            "Brewing cockpit coffee...",
+            "Checking the headwinds...",
+            "Dodging seagulls...",
+            "Filing the flight plan...",
+            "Adjusting cabin pressure...",
+            "Convincing the server to fly...",
+            "Doing wing yoga...",
+            "Looking for a place to land..."
+        ];
+
+        const textEl = document.getElementById('cycling-text');
+        let index = 0;
+
+        function updateText() {
+            textEl.style.opacity = '0';
+            textEl.style.transform = 'translateY(15px) scale(0.98)';
+            setTimeout(() => {
+                index = (index + 1) % phrases.length;
+                textEl.innerText = phrases[index];
+                textEl.style.opacity = '1';
+                textEl.style.transform = 'translateY(0) scale(1)';
+            }, 800);
+        }
+
+        setInterval(updateText, 4000);
+
         const viewport = document.getElementById('viewport-container');
         let targetX = 0, targetY = 0;
         let currentX = 0, currentY = 0;
