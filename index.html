@@ -6,10 +6,10 @@
     <title>Finn Bennett | Updating</title>
     <style>
         :root {
-            --bg-tint: rgba(224, 242, 254, 0.4);
-            --text-main: #0f172a;
-            --text-muted: #475569;
-            --accent: #0ea5e9;
+            --bg-tint: rgba(15, 23, 42, 0.55);
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent: #22d3ee;
         }
 
         * {
@@ -22,7 +22,10 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #e0f2fe;
+            background:
+                radial-gradient(circle at 20% 20%, #172554 0%, transparent 45%),
+                radial-gradient(circle at 80% 10%, #0f766e 0%, transparent 40%),
+                linear-gradient(160deg, #020617 0%, #0b1120 45%, #111827 100%);
             font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
             -webkit-font-smoothing: antialiased;
         }
@@ -42,7 +45,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: saturate(0.9) brightness(1.05);
+            filter: saturate(0.65) brightness(0.75) contrast(1.05);
         }
 
         .overlay {
@@ -51,7 +54,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, rgba(224, 242, 254, 0.2), rgba(224, 242, 254, 0.5));
+            background: linear-gradient(to bottom, rgba(2, 6, 23, 0.35), rgba(2, 6, 23, 0.7));
             backdrop-filter: contrast(1.05) saturate(1.1);
             -webkit-backdrop-filter: contrast(1.05) saturate(1.1);
             z-index: 2;
@@ -114,12 +117,14 @@
             text-align: center;
             max-width: 800px;
             margin: 0 auto;
+            margin-top: clamp(2rem, 8vh, 6rem);
         }
 
-        #cycling-text {
-            font-size: clamp(1.8rem, 5vw, 3.2rem);
-            font-weight: 300;
-            letter-spacing: -0.03em;
+        #status-message {
+            font-size: clamp(1.2rem, 2.8vw, 2rem);
+            font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-weight: 500;
+            letter-spacing: 0.01em;
             color: var(--text-main);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 1;
@@ -154,8 +159,8 @@
                 flex-direction: column;
                 gap: 1.5rem;
             }
-            #cycling-text {
-                font-size: 2.2rem;
+            #status-message {
+                font-size: 1.2rem;
             }
         }
     </style>
@@ -177,7 +182,7 @@
         </header>
 
         <div class="main-message">
-            <div id="cycling-text">Warming up the single-engine...</div>
+            <div id="status-message">under development...be back soon!</div>
         </div>
 
         <footer>
@@ -187,37 +192,6 @@
     </div>
 
     <script>
-        const phrases = [
-            "Warming up the single-engine...",
-            "Recalibrating the altimeter...",
-            "Untangling audio cables...",
-            "Rerouting over Ventura...",
-            "Brewing cockpit coffee...",
-            "Checking the headwinds...",
-            "Dodging seagulls...",
-            "Filing the flight plan...",
-            "Adjusting cabin pressure...",
-            "Convincing the server to fly...",
-            "Doing wing yoga...",
-            "Looking for a place to land..."
-        ];
-
-        const textEl = document.getElementById('cycling-text');
-        let index = 0;
-
-        function updateText() {
-            textEl.style.opacity = '0';
-            textEl.style.transform = 'translateY(15px) scale(0.98)';
-            setTimeout(() => {
-                index = (index + 1) % phrases.length;
-                textEl.innerText = phrases[index];
-                textEl.style.opacity = '1';
-                textEl.style.transform = 'translateY(0) scale(1)';
-            }, 800);
-        }
-
-        setInterval(updateText, 4000);
-
         const viewport = document.getElementById('viewport-container');
         let targetX = 0, targetY = 0;
         let currentX = 0, currentY = 0;
