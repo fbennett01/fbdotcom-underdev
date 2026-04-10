@@ -10,6 +10,7 @@
             --text-main: #e2e8f0;
             --text-muted: #94a3b8;
             --accent: #22d3ee;
+            --cycling-fade-ms: 800;
         }
 
         * {
@@ -125,7 +126,9 @@
             font-weight: 300;
             letter-spacing: -0.03em;
             color: var(--text-main);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition:
+                opacity calc(var(--cycling-fade-ms) * 1ms) cubic-bezier(0.4, 0, 0.2, 1),
+                transform calc(var(--cycling-fade-ms) * 1ms) cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 1;
         }
 
@@ -175,6 +178,12 @@
                 font-size: 0.85rem;
             }
         }
+
+        @media (prefers-reduced-motion: reduce) {
+            #cycling-text {
+                transition: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -221,20 +230,54 @@
         ];
 
         const textEl = document.getElementById('cycling-text');
+        const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const fadeDuration = parseInt(
+            getComputedStyle(document.documentElement).getPropertyValue('--cycling-fade-ms'),
+            10
+        ) || 800;
         let index = 0;
+        let cycleIntervalId = null;
 
         function updateText() {
             textEl.style.opacity = '0';
             textEl.style.transform = 'translateY(15px) scale(0.98)';
             setTimeout(() => {
                 index = (index + 1) % phrases.length;
-                textEl.innerText = phrases[index];
+                textEl.textContent = phrases[index];
                 textEl.style.opacity = '1';
                 textEl.style.transform = 'translateY(0) scale(1)';
-            }, 800);
+            }, fadeDuration);
         }
 
-        setInterval(updateText, 4000);
+        function startCycling() {
+            if (cycleIntervalId) return;
+            cycleIntervalId = setInterval(updateText, 4000);
+        }
+
+        function stopCycling() {
+            if (!cycleIntervalId) return;
+            clearInterval(cycleIntervalId);
+            cycleIntervalId = null;
+        }
+
+        function applyMotionPreference() {
+            if (reducedMotionQuery.matches) {
+                stopCycling();
+                textEl.style.opacity = '1';
+                textEl.style.transform = 'none';
+                textEl.textContent = phrases[0];
+                return;
+            }
+            textEl.style.transform = 'translateY(0) scale(1)';
+            startCycling();
+        }
+
+        applyMotionPreference();
+        reducedMotionQuery.addEventListener('change', applyMotionPreference);
+        window.addEventListener('pagehide', () => {
+            stopCycling();
+            reducedMotionQuery.removeEventListener('change', applyMotionPreference);
+        });
 
         const viewport = document.getElementById('viewport-container');
         let targetX = 0, targetY = 0;
